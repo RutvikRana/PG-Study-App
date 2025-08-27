@@ -1,0 +1,5 @@
+{
+  "name": "Pharma Study Buddy",
+  "description": "A dashboard to assist with pharmacology studies. The initial feature provides detailed information about various drugs by searching their name.",
+  "requestFramePermissions": []
+}
