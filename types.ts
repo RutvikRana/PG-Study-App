@@ -9,4 +9,9 @@ export interface DrugInfo {
   adverseReactions: string[];
   error?: string; 
 }
-   
+
+export interface Explanation {
+  explanation: string;
+  mermaidDiagram: string;
+  error?: string;
+}

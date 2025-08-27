@@ -7,9 +7,9 @@ const App: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-10">
           <h1 className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
-            Pharma Study Buddy
+            PG Study Tools
           </h1>
-          <p className="mt-2 text-slate-400">Your all-in-one pharmacology dashboard.</p>
+          <p className="mt-2 text-slate-400">Your advanced medical study assistant.</p>
         </header>
 
         <main>

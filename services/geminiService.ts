@@ -1,6 +1,5 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
-import { DrugInfo } from '../types';
+import { DrugInfo, Explanation } from '../types';
 
 const API_KEY = process.env.API_KEY;
 
@@ -62,6 +61,26 @@ const drugInfoSchema = {
   required: ["drugClass", "genericName", "brandNames", "mechanismOfAction", "uses", "sideEffects", "adverseReactions"]
 };
 
+const explanationSchema = {
+    type: Type.OBJECT,
+    properties: {
+        error: {
+            type: Type.STRING,
+            description: "An error message if the question is invalid or cannot be answered. Otherwise, omit this field.",
+            nullable: true,
+        },
+        explanation: {
+            type: Type.STRING,
+            description: "A detailed but easy-to-understand explanation for the user's question."
+        },
+        mermaidDiagram: {
+            type: Type.STRING,
+            description: "A Mermaid syntax diagram (using 'flowchart TD' or 'graph TD') to visually illustrate the key steps or relationships in the process."
+        }
+    },
+    required: ["explanation", "mermaidDiagram"]
+};
+
 
 export const fetchDrugInfo = async (drugName: string): Promise<DrugInfo> => {
   try {
@@ -90,4 +109,31 @@ export const fetchDrugInfo = async (drugName: string): Promise<DrugInfo> => {
     throw new Error("An unknown error occurred while fetching drug information.");
   }
 };
-   
+
+export const fetchExplanation = async (question: string): Promise<Explanation> => {
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: `Explain in simple terms: "${question}". Provide a detailed but easy-to-understand explanation and a Mermaid syntax diagram (using 'flowchart TD' or 'graph TD') to visually illustrate the process. The entire response must be a single JSON object. If the question is unclear, not medically related, or cannot be answered, respond with an object containing only an 'error' field.`,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: explanationSchema,
+            },
+        });
+
+        const textResponse = response.text.trim();
+        if (!textResponse) {
+            throw new Error("Received an empty response from the API.");
+        }
+        
+        const parsedData = JSON.parse(textResponse);
+        return parsedData as Explanation;
+
+    } catch (error) {
+        console.error("Error fetching explanation from Gemini API:", error);
+        if (error instanceof Error) {
+            throw new Error(`Failed to fetch explanation: ${error.message}`);
+        }
+        throw new Error("An unknown error occurred while fetching the explanation.");
+    }
+};
