@@ -1,10 +1,11 @@
-
 import React, { useState, useCallback } from 'react';
 import { DrugInfo } from '../types';
 import { fetchDrugInfo } from '../services/geminiService';
 import DrugInfoCard from './DrugInfoCard';
+import DrugInfoCardSkeleton from './DrugInfoCardSkeleton';
 import { SearchIcon } from './icons/SearchIcon';
 import { SpinnerIcon } from './icons/SpinnerIcon';
+import { WarningIcon } from './icons/WarningIcon';
 
 const PharmaBox: React.FC = () => {
   const [drugName, setDrugName] = useState('');
@@ -50,6 +51,7 @@ const PharmaBox: React.FC = () => {
           placeholder="Enter a drug name (e.g., Atorvastatin)"
           className="flex-grow bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder-slate-500 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-200"
           disabled={isLoading}
+          aria-label="Drug name input"
         />
         <button
           type="submit"
@@ -61,17 +63,15 @@ const PharmaBox: React.FC = () => {
         </button>
       </form>
 
-      <div className="mt-8 min-h-[200px]">
-        {isLoading && (
-          <div className="flex flex-col items-center justify-center text-slate-400">
-            <SpinnerIcon />
-            <p className="mt-2">Fetching pharmacological data...</p>
-          </div>
-        )}
+      <div className="mt-8 min-h-[300px]">
+        {isLoading && <DrugInfoCardSkeleton />}
         {error && (
-          <div className="bg-red-900/50 border border-red-700 text-red-300 p-4 rounded-lg text-center">
-            <p className="font-semibold">Error</p>
-            <p>{error}</p>
+          <div className="bg-red-900/50 border border-red-700 text-red-300 p-4 rounded-lg flex items-center justify-center text-center">
+            <WarningIcon className="h-6 w-6 mr-3 flex-shrink-0" />
+            <div>
+              <p className="font-semibold">Error</p>
+              <p>{error}</p>
+            </div>
           </div>
         )}
         {drugInfo && !isLoading && <DrugInfoCard info={drugInfo} />}
@@ -81,4 +81,3 @@ const PharmaBox: React.FC = () => {
 };
 
 export default PharmaBox;
-   

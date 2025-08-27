@@ -1,11 +1,10 @@
-
 import React from 'react';
 import PharmaBox from './components/PharmaBox';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-200 font-sans p-4 sm:p-6 lg:p-8">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-transparent text-slate-200 font-sans p-4 sm:p-6 lg:p-8 selection:bg-cyan-300 selection:text-cyan-900">
+      <div className="max-w-6xl mx-auto">
         <header className="text-center mb-10">
           <h1 className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
             Pharma Study Buddy
@@ -26,4 +25,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-   
